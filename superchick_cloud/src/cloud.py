@@ -51,6 +51,15 @@ class points_to_cloud():
 
 	def geometry_to_cloud2(self, fore, left, right, chin):
 
+
+		#XOFFSET = 0 #1.27
+		#YOFFSET = 0 #.02
+		#ZOFFSET = 0
+		#fore_cloud = [(((fore.translation.x)/1000) + XOFFSET), (((fore.translation.y)/1000) + YOFFSET), (((fore.translation.z)/1000) + ZOFFSET)]
+		#left_cloud = [(((left.translation.x)/1000) + XOFFSET), (((left.translation.y)/1000) + YOFFSET), (((left.translation.z)/1000) + ZOFFSET)]
+		#right_cloud = [(((right.translation.x)/1000) + XOFFSET), (((right.translation.y)/1000) + YOFFSET), (((right.translation.z)/1000) + ZOFFSET)] 
+		#chin_cloud =  [(((chin.translation.x)/1000) + XOFFSET), (((chin.translation.y)/1000) + YOFFSET), (((chin.translation.z)/1000) + ZOFFSET)] 
+		
 		fore_cloud = [(fore.translation.x)/1000, (fore.translation.y)/1000, (fore.translation.z)/1000]
 		left_cloud = [(left.translation.x)/1000, (left.translation.y)/1000, (left.translation.z)/1000]
 		right_cloud = [(right.translation.x)/1000, (right.translation.y)/1000, (right.translation.z)/1000] 
