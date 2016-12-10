@@ -1,8 +1,10 @@
 controller_list:
-  - name: base_bladder_controller
+  - name: base_bladder
   	action_ns: follow_joint_trajectory
   	type: FollowJointTrajectory
   	default: true
     joints:
       - bigbladder_to_head
       - table_to_big_bladder
+initial:
+- group: base_bladder      

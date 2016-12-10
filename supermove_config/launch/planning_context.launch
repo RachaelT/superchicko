@@ -1,6 +1,6 @@
 <launch>
   <!-- By default we do not overwrite the URDF. Change the following to true to change the default behavior -->
-  <arg name="load_robot_description" default="false"/>
+  <arg name="load_robot_description" default="true"/>
   <arg name="model" default="$(find superchick)/superchick.xacro"/>
   <!-- The name of the parameter under which the URDF is loaded -->
   <arg name="robot_description" default="robot_description"/>
@@ -17,7 +17,10 @@
   </group>
 
   <!-- Load default settings for kinematics; these settings are overridden by settings in a node's namespace -->
-  <group ns="$(arg robot_description)_kinematics">
+  <rosparam command="load" file="$(find supermove_config)/config/kinematics.yaml"/>
+
+  <group ns="base_bladder">
+    <!-- "$(arg robot_description)_kinematics"> -->
     <rosparam command="load" file="$(find supermove_config)/config/kinematics.yaml"/>
   </group>
   

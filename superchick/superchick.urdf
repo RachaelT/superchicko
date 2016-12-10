@@ -175,57 +175,7 @@
     <child link="table_cover"/>
     <origin rpy="-1.570795 0 0 " xyz="0 0.2299 -0.18"/>
   </joint>
-  <!-- General Properties -->
-  <!-- Lekan Ogunmolu | November 2016 -->
-  <!--    <link name="right_bladder">
-     <visual>
-       <origin xyz="0 0 0" rpy="0 0 0" />
-       <geometry>
-         <box size="${bladder_length} ${bladder_width} ${bladder_thickness}" />
-       </geometry>
-       <material name="bladder_color"/>
-       <origin xyz="0 0 0" rpy="0 0 0" />
-     </visual>
 
-     <collision>
-       <geometry>        
-        <box size="${bladder_length} ${bladder_width} ${bladder_thickness}" />
-       </geometry>
-       <origin xyz="0 0 0" rpy="0 0 0" />
-     </collision>
-
-     <inertial>
-       <mass value="${mass}"/>
-       <inertia ixx="${mass/12}" ixy="0.0" ixz="0.0" 
-        iyy="${inertia_mom}" iyz="0.0000" 
-        izz="${inertia_mom}"/>
-     </inertial>
-   </link>
-
-   <link name="left_bladder">
-     <visual>
-       <origin xyz="0 ${0.1/2} 0" rpy="0 0 0" />
-       <geometry>
-         <box size="${bladder_length} ${bladder_width} ${bladder_thickness}" />
-       </geometry>
-       <material name="bladder_color"/>
-       <origin xyz="0 ${0.1/2} 0" rpy="0 0 0" />
-     </visual>
-
-     <collision>
-       <geometry>        
-        <box size="${bladder_length} ${bladder_width} ${bladder_thickness}" />
-       </geometry>
-       <origin xyz="0 ${0.1/2} 0" rpy="0 0 0" />
-     </collision>
-
-     <inertial>
-       <mass value="${mass}"/>
-       <inertia ixx="${mass/12}" ixy="0.0" ixz="0.0" 
-        iyy="${inertia_mom}" iyz="0.0000" 
-        izz="${inertia_mom}"/>
-     </inertial>
-   </link> -->
   <link name="big_bladder_link">
     <visual>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -235,12 +185,12 @@
       <material name="bladder_color"/>
       <origin rpy="0 0 0" xyz="0 0 0"/>
     </visual>
-    <collision>
+<!--     <collision>
       <geometry>
         <box size="0.31496 0.31496 0.1016"/>
       </geometry>
       <origin rpy="0 0 0" xyz="0 0 0"/>
-    </collision>
+    </collision> -->
     <inertial>
       <mass value="0.01"/>
       <inertia ixx="0.000833333333333" ixy="0.0" ixz="0.0" iyy="0.000833333333333" iyz="0.0000" izz="0.000833333333333"/>
@@ -257,12 +207,12 @@
       <material name="brown"/>
       <origin rpy="1.570795 0 -3.14159" xyz="0.0 -0.15 0.0366666666667"/>
     </visual>
-    <collision>
+<!--     <collision>
       <geometry>
         <mesh filename="package://superchick/meshes/headnball.stl" scale=".001 .001 .001"/>
       </geometry>
       <origin rpy="1.570795 0 -3.14159" xyz="0.0 -0.15 0.0366666666667"/>
-    </collision>
+    </collision> -->
     <inertial>
       <mass value="0.01"/>
       <inertia ixx="0.000833333333333" ixy="0.0" ixz="0.0" iyy="0.000833333333333" iyz="0.0000" izz="0.000833333333333"/>
@@ -429,7 +379,7 @@
     <child link="headnball_link"/>
     <limit effort="200.0" lower="-0.1016" upper="0.1016" velocity="1.0"/>
     <dynamics damping="0.1" friction="0.2"/>
-    <safety_controller k_position="15" k_velocity="10" soft_lower_limit="0.0" soft_upper_limit="0.6"/>
+    <safety_controller k_position="15" k_velocity="10" soft_lower_limit="0.0" soft_upper_limit="0.3"/>
     <origin rpy="0 0 1.570795" xyz="0.15 0.1033 0"/>
   </joint>
   <!--   <joint name="rightbladder_to_neck" type="continuous">
@@ -464,7 +414,7 @@
     <child link="vicon_frame"/>
     <origin rpy="0 0 0" xyz="-3.5 -2.0 -0.2"/>
   </joint>
-  <transmission name="base_transmission">
+<!--   <transmission name="base_transmission">
     <type>transmission_interface/SimpleTransmission</type>
     <joint name="bigbladder_to_head">
       <hardwareInterface>EffortJointInterface</hardwareInterface>
@@ -473,7 +423,7 @@
       <hardwareInterface>EffortJointInterface</hardwareInterface>
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
-  </transmission>
+  </transmission> -->
   <!--    <transmission name="right_transmission">
       <type>transmission_interface/SimpleTransmission</type>
       <joint name="rightbladder_to_neck">
