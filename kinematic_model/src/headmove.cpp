@@ -62,7 +62,9 @@ int main(int argc, char **argv)
   // The :move_group_interface:`MoveGroup` class can be easily 
   // setup using just the name
   // of the group you would like to control and plan for.
-  moveit::planning_interface::MoveGroup group("base_bladder");
+  moveit::planning_interface::MoveGroup *group;
+  group = new moveit::planning_interface::MoveGroup("base_bladder");
+  group->setEndEffectorLink("headnball_link");
 
   // We will use the :planning_scene_interface:`PlanningSceneInterface`
   // class to deal directly with the world.
@@ -76,10 +78,10 @@ int main(int argc, char **argv)
   // ^^^^^^^^^^^^^^^^^^^^^^^^^
   //
   // We can print the name of the reference frame for this robot.
-  ROS_INFO("Reference frame: %s", group.getPlanningFrame().c_str());
-  
+  ROS_INFO("Reference frame: %s", group->getPlanningFrame().c_str());
+  // group.setEndEffectorLink("headnball_link");
   // We can also print the name of the end-effector link for this group.
-  ROS_INFO("Reference frame: %s", group.getEndEffectorLink().c_str());
+  ROS_INFO("Reference frame: %s", group->getEndEffectorLink().c_str());
 
   // Planning to a Pose goal
   // ^^^^^^^^^^^^^^^^^^^^^^^
@@ -90,7 +92,7 @@ int main(int argc, char **argv)
   target_pose1.position.x = 0.28;
   target_pose1.position.y = -0.7;
   target_pose1.position.z = 1.0;
-  group.setPoseTarget(target_pose1);
+  group->setPoseTarget(target_pose1);
 
 
   // Now, we call the planner to compute the plan
@@ -98,7 +100,7 @@ int main(int argc, char **argv)
   // Note that we are just planning, not asking move_group 
   // to actually move the robot.
   moveit::planning_interface::MoveGroup::Plan my_plan;
-  bool success = group.plan(my_plan);
+  bool success = group->plan(my_plan);
 
   ROS_INFO("Visualizing plan 1 (pose goal) %s",success?"":"FAILED");    
   /* Sleep to give Rviz time to visualize the plan. */
@@ -142,13 +144,13 @@ int main(int argc, char **argv)
   //
   // First get the current set of joint values for the group.
   std::vector<double> group_variable_values;
-  group.getCurrentState()->copyJointGroupPositions(group.getCurrentState()->getRobotModel()->getJointModelGroup(group.getName()), group_variable_values);
+  group->getCurrentState()->copyJointGroupPositions(group->getCurrentState()->getRobotModel()->getJointModelGroup(group->getName()), group_variable_values);
   
   // Now, let's modify one of the joints, plan to the new joint
   // space goal and visualize the plan.
   group_variable_values[0] = -1.0;  
-  group.setJointValueTarget(group_variable_values);
-  success = group.plan(my_plan);
+  group->setJointValueTarget(group_variable_values);
+  success = group->plan(my_plan);
 
   ROS_INFO("Visualizing plan 2 (joint space goal) %s",success?"":"FAILED");
   /* Sleep to give Rviz time to visualize the plan. */
@@ -172,34 +174,34 @@ int main(int argc, char **argv)
   // Now, set it as the path constraint for the group.
   moveit_msgs::Constraints test_constraints;
   test_constraints.orientation_constraints.push_back(ocm);  
-  group.setPathConstraints(test_constraints);
+  group->setPathConstraints(test_constraints);
 
   // We will reuse the old goal that we had and plan to it.
   // Note that this will only work if the current state already 
   // satisfies the path constraints. So, we need to set the start
   // state to a new pose. 
-  robot_state::RobotState start_state(*group.getCurrentState());
+  robot_state::RobotState start_state(*group->getCurrentState());
   geometry_msgs::Pose start_pose2;
   start_pose2.orientation.w = 1.0;
   start_pose2.position.x = 0.55;
   start_pose2.position.y = -0.05;
   start_pose2.position.z = 0.8;
   const robot_state::JointModelGroup *joint_model_group =
-                  start_state.getJointModelGroup(group.getName());
+                  start_state.getJointModelGroup(group->getName());
   start_state.setFromIK(joint_model_group, start_pose2);
-  group.setStartState(start_state);
+  group->setStartState(start_state);
   
   // Now we will plan to the earlier pose target from the new 
   // start state that we have just created.
-  group.setPoseTarget(target_pose1);
-  success = group.plan(my_plan);
+  group->setPoseTarget(target_pose1);
+  success = group->plan(my_plan);
 
   ROS_INFO("Visualizing plan 3 (constraints) %s",success?"":"FAILED");
   /* Sleep to give Rviz time to visualize the plan. */
   sleep(10.0);
 
   // When done with the path constraint be sure to clear it.
-  group.clearPathConstraints();
+  group->clearPathConstraints();
 
   // Cartesian Paths
   // ^^^^^^^^^^^^^^^
@@ -227,7 +229,7 @@ int main(int argc, char **argv)
   // translation.  We will specify the jump threshold as 0.0, effectively
   // disabling it.
   moveit_msgs::RobotTrajectory trajectory;
-  double fraction = group.computeCartesianPath(waypoints,
+  double fraction = group->computeCartesianPath(waypoints,
                                                0.01,  // eef_step
                                                0.0,   // jump_threshold
                                                trajectory);
@@ -242,7 +244,7 @@ int main(int argc, char **argv)
   // ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
   // First, we will define the collision object message.
   moveit_msgs::CollisionObject collision_object;
-  collision_object.header.frame_id = group.getPlanningFrame();
+  collision_object.header.frame_id = group->getPlanningFrame();
 
   /* The id of the object is used to identify it. */
   collision_object.id = "box1";
@@ -279,13 +281,13 @@ int main(int argc, char **argv)
   // Planning with collision detection can be slow.  Lets set the planning time
   // to be sure the planner has enough time to plan around the box.  10 seconds
   // should be plenty.
-  group.setPlanningTime(10.0);
+  group->setPlanningTime(10.0);
 
 
   // Now when we plan a trajectory it will avoid the obstacle
-  group.setStartState(*group.getCurrentState());
-  group.setPoseTarget(target_pose1);
-  success = group.plan(my_plan);
+  group->setStartState(*group->getCurrentState());
+  group->setPoseTarget(target_pose1);
+  success = group->plan(my_plan);
 
   ROS_INFO("Visualizing plan 5 (pose goal move around box) %s",
     success?"":"FAILED");
@@ -295,14 +297,14 @@ int main(int argc, char **argv)
 
   // Now, let's attach the collision object to the robot.
   ROS_INFO("Attach the object to the robot");  
-  group.attachObject(collision_object.id);  
+  group->attachObject(collision_object.id);  
   /* Sleep to give Rviz time to show the object attached (different color). */
   sleep(4.0);
 
 
   // Now, let's detach the collision object from the robot.
   ROS_INFO("Detach the object from the robot");  
-  group.detachObject(collision_object.id);  
+  group->detachObject(collision_object.id);  
   /* Sleep to give Rviz time to show the object detached. */
   sleep(4.0);
 
